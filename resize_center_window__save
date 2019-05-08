@@ -1,0 +1,17 @@
+#!/bin/bash
+set -o pipefail
+set -x
+
+COORDSFILE=/tmp/resize_center_window.txt
+
+if [ -n "$1" ]; then
+    [ "$1" == 2 ] && { echo "1515 930" > $COORDSFILE; exit $?; }
+fi
+
+WINID=`xdotool selectwindow` || return $?
+COORDS=`xdotool getwindowgeometry $WINID | grep Geometry | cut -d: -f2` || return $?
+CX=`echo $COORDS | cut -dx -f1`
+CY=`echo $COORDS | cut -dx -f2`
+echo "$CX $CY" > $COORDSFILE
+
+resize_center_window $WINID
