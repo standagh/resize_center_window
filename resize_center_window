@@ -2,7 +2,7 @@
 set -o pipefail
 set -x
 
-COORDSFILE=/tmp/resize_center_window.txt
+[ -z "$COORDSFILE" ] && COORDSFILE=/tmp/resize_center_window.txt
 
 RESOL=`xrandr  | grep current | awk -F"," '{print $2}' | awk '{print $2" "$4}'` || exit $?
 RESOLX=`echo $RESOL | cut -d\  -f1`
