@@ -2,7 +2,7 @@
 set -o pipefail
 set -x
 
-[ -r "$HOME/.config/resize_save/resize_save_config" ] && . "$HOME/.config/resize_save/resize_save_config"
+#[ -r "$HOME/.config/resize_save/resize_save_config" ] && . "$HOME/.config/resize_save/resize_save_config"
 
 [ -z "$COORDSFILE" ] && COORDSFILE=/tmp/resize_center_window.txt
 
@@ -16,4 +16,4 @@ CX=`echo $COORDS | cut -dx -f1`
 CY=`echo $COORDS | cut -dx -f2`
 echo "$CX $CY" > "$COORDSFILE"
 
-#resize_center_window $WINID
+resize_center_window.py $WINID
