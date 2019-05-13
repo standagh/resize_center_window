@@ -2,6 +2,8 @@
 set -o pipefail
 set -x
 
+[ -r "$HOME/.config/resize_save/resize_save_config" ] && . "$HOME/.config/resize_save/resize_save_config"
+
 [ -z "$COORDSFILE" ] && COORDSFILE=/tmp/resize_center_window.txt
 
 RESOL=`xrandr  | grep current | awk -F"," '{print $2}' | awk '{print $2" "$4}'` || exit $?
@@ -12,14 +14,17 @@ if [ $RESOLX -gt 3000 ]; then
     RESOLX=$(( $RESOLX - 1920 ))
 fi
 
+[ -z "$POS_OFFS_X" ] && POS_OFFS_X=0
+[ -z "$POS_OFFS_Y" ] && POS_OFFS_Y=0
+
 COORDS="1920 1080"
-[ -r $COORDSFILE ] && COORDS=`cat /tmp/resize_center_window.txt`
+[ -r $COORDSFILE ] && COORDS=`cat "$COORDSFILE"`
 
 COORDSX=`echo $COORDS | cut -f1 -d\  `
 COORDSY=`echo $COORDS | cut -f2 -d\  `
 
-POSX=$(( ($RESOLX-$COORDSX)/2 ))
-POSY=$(( ($RESOLY-$COORDSY)/2 ))
+POSX=$(( ($RESOLX-$COORDSX)/2 + $POS_OFFS_X ))
+POSY=$(( ($RESOLY-$COORDSY)/2 + $POS_OFFS_Y ))
 
 if [ -z "$1" ]; then
     WINID=`xdotool selectwindow` || exit $?
@@ -27,4 +32,6 @@ else
     WINID=$1
 fi
 xdotool windowsize  $WINID $COORDSX $COORDSY && xdotool windowmove $WINID $POSX $POSY
+
+exit $?
 

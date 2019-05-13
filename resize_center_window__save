@@ -2,6 +2,8 @@
 set -o pipefail
 set -x
 
+[ -r "$HOME/.config/resize_save/resize_save_config" ] && . "$HOME/.config/resize_save/resize_save_config"
+
 [ -z "$COORDSFILE" ] && COORDSFILE=/tmp/resize_center_window.txt
 
 if [ -n "$1" ]; then
@@ -12,6 +14,6 @@ WINID=`xdotool selectwindow` || return $?
 COORDS=`xdotool getwindowgeometry $WINID | grep Geometry | cut -d: -f2` || return $?
 CX=`echo $COORDS | cut -dx -f1`
 CY=`echo $COORDS | cut -dx -f2`
-echo "$CX $CY" > $COORDSFILE
+echo "$CX $CY" > "$COORDSFILE"
 
-resize_center_window $WINID
+#resize_center_window $WINID
