@@ -4,7 +4,7 @@ set -x
 
 #[ -r "$HOME/.config/resize_save/resize_save_config" ] && . "$HOME/.config/resize_save/resize_save_config"
 
-[ -z "$COORDSFILE" ] && COORDSFILE=/tmp/resize_center_window.txt
+[ -z "$COORDSFILE" ] && COORDSFILE="$HOME/.config/resize_center_window.txt"
 
 if [ -n "$1" ]; then
     [ "$1" == 2 ] && { echo "1515 930" > $COORDSFILE; exit $?; }

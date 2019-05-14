@@ -26,11 +26,11 @@ def read_coords( coordsfile ):
             return l.split(" ")
     except Exception as e:
         log.info("Error: {} for file '{}'".format(e, coordsfile))
-        raise e
+        return (1000,500)
 
 #log.info(sys.argv)
 
-COORDSFILE="/tmp/resize_center_window.txt"
+COORDSFILE="{}/.config/resize_center_window.txt".format(os.environ["HOME"])
 
 if 'COORDSFILE' in os.environ:
     sizex,sizey = read_coords(os.environ['COORDSFILE'])
