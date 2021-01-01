@@ -31,6 +31,7 @@ def read_coords( coordsfile ):
 #log.info(sys.argv)
 
 COORDSFILE="{}/.config/resize_center_window.txt".format(os.environ["HOME"])
+log.debug("Coordsfile is '{}'".format(COORDSFILE))
 
 if 'COORDSFILE' in os.environ:
     sizex,sizey = read_coords(os.environ['COORDSFILE'])
@@ -44,7 +45,10 @@ ret = subprocess.run("xdotool getmouselocation | awk '{print $1\" \"$2}' | tr -d
 mousex, mousey = str(ret.stdout, "utf-8").strip().split(" ")
 log.debug("mouse x,y: '{},{}'".format(mousex, mousey))
 
-ret = subprocess.run("xrandr | grep ' connected ' | sed 's/primary //' | awk '{print $3}' | tr x+ \ \ ", shell=True, check=True, stdout=subprocess.PIPE)
+# if monitor is connected but disabled in options, there is following ouput after 'grep connected':
+# eDP-1 connected (normal left inverted right x axis y axis)
+# DP-1-2 connected primary 1920x1200+0+0 (normal left inverted right x axis y axis) 518mm x 324mm
+ret = subprocess.run("xrandr | grep ' connected ' | sed 's/primary //' | awk '{print $3}' | tr x+ \ \  | grep '^[0-9]'", shell=True, check=True, stdout=subprocess.PIPE)
 lns = [ l.split(" ") for l in str(ret.stdout,"utf-8").strip().split("\n") ]
 """
 lns indexes:
